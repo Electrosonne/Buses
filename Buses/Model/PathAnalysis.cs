@@ -227,12 +227,14 @@ namespace Buses
                                 var busTime = startMinute + WaysAllTime[i] * repeats;
 
                                 var timeOnWayIteration = 0;
+                                var timeBusArrives = 0;
 
                                 foreach (var elem in Route[i])
-                                {
+                                {            
+                                    //Время автобуса приезда к следующей остановке
                                     if (elem.Key == nextIndex)
                                     {
-                                        if (busTime + timeOnWayIteration < nowMinute)
+                                        if (busTime + timeBusArrives < nowMinute)
                                         {
                                             //Значит в этот интервал автобуса не попадаем
                                             //Надо ждать следующего цикла (прохода с начала маршрута)
@@ -240,6 +242,13 @@ namespace Buses
                                         }
 
                                         break;
+                                    }
+
+                                    //Время прибытия автобуса на текущую остановку
+                                    if (elem.Key == index + 1)
+                                    {
+                                        timeBusArrives = timeOnWayIteration;
+                                        //Затем прибавляется время от текущей к следующей
                                     }
 
                                     timeOnWayIteration += elem.Value;
